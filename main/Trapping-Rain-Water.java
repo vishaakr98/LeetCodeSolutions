@@ -1,23 +1,23 @@
 1class Solution {
 2    public int trap(int[] height) {
-3        int res = 0;
-4        int lHeight[] = new int[height.length];
-5        int rHeight[] = new int[height.length];
-6
-7        // maintians max left height
-8        lHeight[0] = height[0];
-9        for(int i = 1 ; i < height.length ; i++) {
-10            lHeight[i] = Math.max(lHeight[i-1], height[i]);
-11        }
-12
-13        // maintain max right height
-14        rHeight[height.length-1] = height[height.length-1];
-15        for(int i = height.length-2 ; i >= 0  ; i--) {
-16            rHeight[i] = Math.max(rHeight[i+1], height[i]);
-17        }
-18
-19        for(int i = 0 ; i < height.length ; i++) {
-20            res += Math.min(lHeight[i], rHeight[i]) - height[i];
+3        // two pointer approach, just runs once comapred to three times in DP approach
+4        int res = 0;
+5        int l = 1; 
+6        int r = height.length-2;
+7        int lmax = height[0];
+8        int rmax = height[height.length-1];
+9
+10        while (l <= r) {
+11            // if edges are not the tallest there is no water trapped. 
+12            if (lmax < height[l])
+13                lmax = height[l++];
+14            else if (rmax < height[r])
+15                rmax = height[r--];
+16            // when you know the walls, now calculate the max water stored. 
+17            else if (lmax < rmax) 
+18                res += lmax - height[l++];
+19            else 
+20                res += rmax - height[r--];
 21        }
 22
 23        return res;
